@@ -2,32 +2,26 @@ import React from 'react'
 import { View, Image, Text } from "react-native";
 import styles from './styles';
 
-const ChatRoomItem = () => {
+const ChatRoomItem = ({chatRoom}) => {
+  const user = chatRoom.users[1]
   return (
     <View style={styles.container}>
         <Image
           source={{
-            uri: "https://avatars.githubusercontent.com/u/44367062?s=400&u=8d55969ede5e1034fe015603d80b82958d249392&v=4",
+            uri: user.imageUri,
           }}
           style={styles.image}
         />
-        <View style={styles.badgeContainer}>
-          <Text style={styles.badgeText}>4</Text>
-        </View>
+        {chatRoom.newMessages && <View style={styles.badgeContainer}>
+          <Text style={styles.badgeText}>{chatRoom.newMessages}</Text>
+        </View>}
         <View style={styles.rightContainer}>
           <View style={styles.row}>
-            <Text style={styles.name}>Raga</Text>
-            <Text style={styles.text}>1:00 AM</Text>
+            <Text style={styles.name}>{user.name}</Text>
+            <Text style={styles.text}>{chatRoom.lastMessage.createdAt}</Text>
           </View>
           <Text numberOfLines={1} style={styles.text}>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quam.
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia
-            modi ut atque vero assumenda neque expedita explicabo, harum fugiat
-            nam repellat corporis, commodi sequi unde voluptates voluptatem
-            maiores doloribus tenetur quo aliquid nostrum. Alias nostrum
-            voluptas asperiores dolor eius quam voluptatem doloribus,
-            consectetur dignissimos! Corrupti aliquam cupiditate veniam?
-            Reprehenderit, rerum?
+            {chatRoom.lastMessage.content}
           </Text>
         </View>
       </View>

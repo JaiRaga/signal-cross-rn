@@ -10,7 +10,7 @@ import styles from "./styles";
 
 export default function MessageInput() {
   const [message, setMessage] = useState("");
-  console.warn(message)
+  console.warn(message);
   return (
     <View style={styles.root}>
       <View style={styles.inputContainer}>
@@ -22,6 +22,7 @@ export default function MessageInput() {
         />
         <TextInput
           style={styles.input}
+          value={message}
           onChangeText={(text) => setMessage(text)}
           placeholder="Signal Message..."
         />

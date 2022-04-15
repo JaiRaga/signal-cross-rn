@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     borderWidth: 1,
     borderColor: "#dedede",
-    padding: 10
+    padding: 5
   },
   input: {
     flex: 1,
@@ -25,8 +25,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 5
   },
   buttonContainer: {
-    width: 50,
-    height: 50,
+    width: 40,
+    height: 40,
     borderRadius: 25,
     backgroundColor: "#3777f0",
     justifyContent: 'center',

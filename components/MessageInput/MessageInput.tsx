@@ -1,9 +1,16 @@
 import { StyleSheet, Text, TextInput, View } from "react-native";
-import React from "react";
-import { SimpleLineIcons, Feather } from "@expo/vector-icons";
+import React, { useState } from "react";
+import {
+  SimpleLineIcons,
+  Feather,
+  MaterialCommunityIcons,
+  AntDesign,
+} from "@expo/vector-icons";
 import styles from "./styles";
 
 export default function MessageInput() {
+  const [message, setMessage] = useState("");
+  console.warn(message)
   return (
     <View style={styles.root}>
       <View style={styles.inputContainer}>
@@ -13,11 +20,21 @@ export default function MessageInput() {
           color="grey"
           style={styles.icon}
         />
-        <TextInput style={styles.input} />
-        <Feather name="camera" size={24} color="black" />
+        <TextInput
+          style={styles.input}
+          onChangeText={(text) => setMessage(text)}
+          placeholder="Signal Message..."
+        />
+        <Feather name="camera" size={24} color="grey" style={styles.icon} />
+        <MaterialCommunityIcons
+          name="microphone-outline"
+          size={24}
+          color="grey"
+          style={styles.icon}
+        />
       </View>
       <View style={styles.buttonContainer}>
-        <Text style={styles.buttonText}>+</Text>
+        <AntDesign name="plus" size={24} color="white" />
       </View>
     </View>
   );

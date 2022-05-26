@@ -1,14 +1,16 @@
 import { View, Text, StyleSheet, FlatList, SafeAreaView } from "react-native";
 import React from "react";
-import { useRoute } from "@react-navigation/native";
+import { useRoute, useNavigation } from "@react-navigation/native";
 import Message from "../components/Message";
 import chatRoomData from "../assets/dummy-data/Chats";
 import MessageInput from "../components/MessageInput";
 
 const ChatRoomScreen = () => {
   const route = useRoute()
+  const navigation = useNavigation()
 
-  console.warn("displaying chatRoom id: ", route.params?.id)
+  navigation.setOptions({title: 'user'})
+  
   return (
     <SafeAreaView style={styles.page}>
       <FlatList

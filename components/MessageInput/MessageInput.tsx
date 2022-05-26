@@ -1,4 +1,12 @@
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  Pressable,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
 import React, { useState } from "react";
 import {
   SimpleLineIcons,
@@ -10,9 +18,29 @@ import styles from "./styles";
 
 export default function MessageInput() {
   const [message, setMessage] = useState("");
-  console.warn(message);
+
+  const sendMessage = () => {
+    console.warn("Sending message:");
+  };
+
+  const onPlusClicked = () => {
+    console.warn("Plus Clicked");
+  };
+
+  const onPress = () => {
+    if (message) {
+      sendMessage();
+    } else {
+      onPlusClicked();
+    }
+  };
+
   return (
-    <View style={styles.root}>
+    <KeyboardAvoidingView
+      style={styles.root}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={100}
+    >
       <View style={styles.inputContainer}>
         <SimpleLineIcons
           name="emotsmile"
@@ -34,9 +62,13 @@ export default function MessageInput() {
           style={styles.icon}
         />
       </View>
-      <View style={styles.buttonContainer}>
-        <AntDesign name="plus" size={24} color="white" />
-      </View>
-    </View>
+      <Pressable onPress={onPress} style={styles.buttonContainer}>
+        {message ? (
+          <Feather name="send" size={18} color="white" />
+        ) : (
+          <AntDesign name="plus" size={24} color="white" />
+        )}
+      </Pressable>
+    </KeyboardAvoidingView>
   );
 }

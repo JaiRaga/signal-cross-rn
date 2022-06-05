@@ -22,13 +22,14 @@ export type RootStackParamList = {
   NotFound: undefined;
   ChatRoom: undefined;
   Home: undefined;
+  UsersScreen: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
   NativeStackScreenProps<RootStackParamList, Screen>;
 
 export type RootTabParamList = {
-  TabOne: undefined;
+  Home: undefined;
   TabTwo: undefined;
 };
 

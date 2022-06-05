@@ -31,6 +31,7 @@ import {
 import LinkingConfiguration from './LinkingConfiguration';
 import HomeHeader from '../components/HomeHeader';
 import ChatRoomHeader from '../components/ChatRoomHeader';
+import UsersScreen from '../screens/UsersScreen';
 
 export default function Navigation({
   colorScheme,
@@ -79,9 +80,9 @@ function RootNavigator() {
         }}
       />
       <Stack.Screen
-        name="NotFound"
-        component={NotFoundScreen}
-        options={{ title: 'Oops!' }}
+        name="UsersScreen"
+        component={UsersScreen}
+        options={{ title: "Users" }}
       />
     </Stack.Navigator>
   );

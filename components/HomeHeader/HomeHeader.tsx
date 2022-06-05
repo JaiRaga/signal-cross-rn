@@ -1,9 +1,11 @@
 import { useWindowDimensions, View, Image, Platform, Text } from 'react-native';
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Auth } from 'aws-amplify';
+import { useNavigation } from '@react-navigation/native';
 
 const HomeHeader = (props) => {
   const { width } = useWindowDimensions();
+  const navigation = useNavigation()
 
   const logout = () => {
     Auth.signOut()
@@ -49,6 +51,7 @@ const HomeHeader = (props) => {
         name="edit-2"
         size={24}
         color="black"
+        onPress={() => navigation.navigate('UsersScreen')}
         style={{ marginHorizontal: 10 }}
       />
       <MaterialCommunityIcons

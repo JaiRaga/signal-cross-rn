@@ -1,15 +1,15 @@
-import { View, Image, Text, StyleSheet, FlatList } from "react-native";
-import ChatRoomItem from "../components/ChatRoomItem";
-import { RootTabScreenProps } from "../types";
+import { View, Image, Text, StyleSheet, FlatList } from 'react-native';
+import ChatRoomItem from '../components/ChatRoomItem';
+import { RootTabScreenProps } from '../types';
 
-import chatRooms from "../assets/dummy-data/ChatRooms";
+import chatRooms from '../assets/dummy-data/ChatRooms';
 
 const chatRoom1 = chatRooms[3];
 const chatRoom2 = chatRooms[1];
 
-export default function TabOneScreen({
+export default function HomeScreen({
   navigation,
-}: RootTabScreenProps<"TabOne">) {
+}: RootTabScreenProps<'Home'>) {
   return (
     <View style={styles.page}>
       <FlatList
@@ -24,7 +24,7 @@ export default function TabOneScreen({
 
 const styles = StyleSheet.create({
   page: {
-    backgroundColor: "white",
+    backgroundColor: 'white',
     flex: 1,
   },
 });

@@ -1,16 +1,17 @@
-import { View, Text, StyleSheet, FlatList, SafeAreaView } from "react-native";
-import React from "react";
-import { useRoute, useNavigation } from "@react-navigation/native";
-import Message from "../components/Message";
-import chatRoomData from "../assets/dummy-data/Chats";
-import MessageInput from "../components/MessageInput";
+import { View, Text, StyleSheet, FlatList, SafeAreaView } from 'react-native';
+import React from 'react';
+import { useRoute, useNavigation } from '@react-navigation/native';
+import Message from '../components/Message';
+import chatRoomData from '../assets/dummy-data/Chats';
+import MessageInput from '../components/MessageInput';
+import { RootTabScreenProps } from '../types';
 
 const ChatRoomScreen = () => {
-  const route = useRoute()
-  const navigation = useNavigation()
+  // const route = useRoute()
+  const navigation = useNavigation();
 
-  navigation.setOptions({title: 'user'})
-  
+  navigation.setOptions({ title: 'user' });
+
   return (
     <SafeAreaView style={styles.page}>
       <FlatList
@@ -27,7 +28,7 @@ export default ChatRoomScreen;
 
 const styles = StyleSheet.create({
   page: {
-    backgroundColor: "white",
+    backgroundColor: 'white',
     flex: 1,
   },
 });

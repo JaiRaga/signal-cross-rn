@@ -1,15 +1,23 @@
-import { View, Image, Text, StyleSheet, FlatList } from "react-native";
-import { RootTabScreenProps } from "../types";
+import { useState, useEffect } from 'react';
+import { View, Image, Text, StyleSheet, FlatList } from 'react-native';
+import { DataStore } from 'aws-amplify';
 
-import UserItem from "../components/UserItem";
-
-import Users from "../assets/dummy-data/Users" 
+import { User } from '../src/models';
+import UserItem from '../components/UserItem';
 
 export default function UsersScreen() {
+  const [users, setUsers] = useState<User[]>([]);
+
+  useEffect(() => {
+    // Get users
+    DataStore.query(User).then(setUsers)
+    
+  }, []);
+
   return (
     <View style={styles.page}>
       <FlatList
-        data={Users}
+        data={users}
         renderItem={({ item }) => <UserItem user={item} />}
         showsVerticalScrollIndicator={false}
         // onEndReached={() => console.log("List Ended...")}
@@ -20,7 +28,7 @@ export default function UsersScreen() {
 
 const styles = StyleSheet.create({
   page: {
-    backgroundColor: "white",
+    backgroundColor: 'white',
     flex: 1,
   },
 });

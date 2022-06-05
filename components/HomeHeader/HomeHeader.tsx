@@ -1,8 +1,14 @@
 import { useWindowDimensions, View, Image, Platform, Text } from 'react-native';
-import { Feather } from '@expo/vector-icons';
+import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Auth } from 'aws-amplify';
 
 const HomeHeader = (props) => {
   const { width } = useWindowDimensions();
+
+  const logout = () => {
+    Auth.signOut()
+  };
+
   return (
     <View
       style={[
@@ -27,7 +33,7 @@ const HomeHeader = (props) => {
         style={{
           flex: 1,
           textAlign: 'center',
-          marginLeft: 50,
+          marginLeft: 82,
           fontWeight: 'bold',
         }}
       >
@@ -43,6 +49,13 @@ const HomeHeader = (props) => {
         name="edit-2"
         size={24}
         color="black"
+        style={{ marginHorizontal: 10 }}
+      />
+      <MaterialCommunityIcons
+        name="logout"
+        size={24}
+        color="black"
+        onPress={logout}
         style={{ marginHorizontal: 10 }}
       />
     </View>

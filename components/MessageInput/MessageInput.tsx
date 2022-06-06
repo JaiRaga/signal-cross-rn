@@ -6,25 +6,47 @@ import {
   Pressable,
   KeyboardAvoidingView,
   Platform,
-} from "react-native";
-import React, { useState } from "react";
+} from 'react-native';
+import React, { useState } from 'react';
 import {
   SimpleLineIcons,
   Feather,
   MaterialCommunityIcons,
   AntDesign,
-} from "@expo/vector-icons";
-import styles from "./styles";
+} from '@expo/vector-icons';
+import { Auth, DataStore } from 'aws-amplify';
+import { Message, ChatRoom } from '../../src/models';
 
-export default function MessageInput() {
-  const [message, setMessage] = useState("");
+import styles from './styles';
 
-  const sendMessage = () => {
-    console.warn("Sending message:");
+export default function MessageInput({ chatRoom }) {
+  const [message, setMessage] = useState('');
+
+  const sendMessage = async () => {
+    const user = await Auth.currentAuthenticatedUser();
+    const newMessage = await DataStore.save(
+      new Message({
+        content: message,
+        userID: user.attributes.sub,
+        chatroomID: chatRoom.id,
+      })
+    );
+
+    updateLastMessage(newMessage);
+
+    setMessage('');
+  };
+
+  const updateLastMessage = async (newMessage) => {
+    DataStore.save(
+      ChatRoom.copyOf(chatRoom, (updatedChatRoom) => {
+        updatedChatRoom.LastMessage = newMessage;
+      })
+    );
   };
 
   const onPlusClicked = () => {
-    console.warn("Plus Clicked");
+    console.warn('Plus Clicked');
   };
 
   const onPress = () => {
@@ -38,7 +60,7 @@ export default function MessageInput() {
   return (
     <KeyboardAvoidingView
       style={styles.root}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={100}
     >
       <View style={styles.inputContainer}>

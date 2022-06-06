@@ -2,16 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { View, Image, Text, Pressable, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { DataStore, Auth } from 'aws-amplify';
-import { User, ChatRoomUser } from '../../src/models';
+import { User, ChatRoomUser, Message } from '../../src/models';
 import styles from './styles';
 
 const ChatRoomItem = ({ chatRoom }) => {
   const [users, setUsers] = useState<User[]>([]); // all users in the chat room
   const [user, setUser] = useState<User | null>(null); // to display user
-  // const user = chatRoom.users[1];
+  const [lastMessage, setLastMessage] = useState<Message | undefined>(); // set last message
 
   const navigation = useNavigation();
 
+  console.log('Home screen', chatRoom);
+  // To display users on the home screen who are in the auth user chat list
   useEffect(() => {
     const fetchUser = async () => {
       const fetchedUsers = (await DataStore.query(ChatRoomUser))
@@ -28,6 +30,16 @@ const ChatRoomItem = ({ chatRoom }) => {
     };
 
     fetchUser();
+  }, []);
+
+  // To display last message of every chat
+  useEffect(() => {
+    if (!chatRoom.chatRoomLastMessageId) {
+      return;
+    }
+    DataStore.query(Message, chatRoom.chatRoomLastMessageId).then(
+      setLastMessage
+    );
   }, []);
 
   const onPress = () => {
@@ -54,10 +66,10 @@ const ChatRoomItem = ({ chatRoom }) => {
       <View style={styles.rightContainer}>
         <View style={styles.row}>
           <Text style={styles.name}>{user.name}</Text>
-          <Text style={styles.text}>{chatRoom.lastMessage?.createdAt}</Text>
+          <Text style={styles.text}>{lastMessage?.createdAt}</Text>
         </View>
         <Text numberOfLines={1} style={styles.text}>
-          {chatRoom.lastMessage?.content}
+          {lastMessage?.content}
         </Text>
       </View>
     </Pressable>

@@ -20,7 +20,7 @@ const HomeHeader = (props) => {
           alignItems: 'center',
           width,
           padding: 10,
-          backgroundColor: 'yellow',
+          backgroundColor: 'white',
         },
         Platform.OS === 'android' ? { marginRight: 60 } : null,
       ]}

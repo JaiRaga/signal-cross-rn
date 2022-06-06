@@ -1,15 +1,29 @@
+import { useState, useEffect } from 'react';
 import { View, Image, Text, StyleSheet, FlatList } from 'react-native';
+import { Auth, DataStore } from 'aws-amplify';
 import ChatRoomItem from '../components/ChatRoomItem';
 import { RootTabScreenProps } from '../types';
+import { ChatRoom, ChatRoomUser } from '../src/models';
 
-import chatRooms from '../assets/dummy-data/ChatRooms';
+export default function HomeScreen() {
+  const [chatRooms, setChatRooms] = useState<ChatRoom[]>([]);
 
-const chatRoom1 = chatRooms[3];
-const chatRoom2 = chatRooms[1];
+  useEffect(() => {
+    const fetchChatRooms = async () => {
+      const userData = await Auth.currentAuthenticatedUser();
 
-export default function HomeScreen({
-  navigation,
-}: RootTabScreenProps<'Home'>) {
+      const chatRooms = (await DataStore.query(ChatRoomUser))
+        .filter(
+          (chatRoomUser) => chatRoomUser.user.id === userData.attributes.sub
+        )
+        .map((chatRoomUser) => chatRoomUser.chatRoom);
+
+      setChatRooms(chatRooms);
+    };
+
+    fetchChatRooms();
+  }, []);
+
   return (
     <View style={styles.page}>
       <FlatList

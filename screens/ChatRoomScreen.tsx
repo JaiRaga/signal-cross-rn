@@ -19,7 +19,6 @@ const ChatRoomScreen = () => {
   const [chatRoom, setChatRoom] = useState<ChatRoom | null>(null);
 
   const route = useRoute();
-  const navigation = useNavigation();
 
   useEffect(() => {
     fetchChatRoom();
@@ -66,8 +65,6 @@ const ChatRoomScreen = () => {
     );
     setMessages(fetchedMessages);
   };
-
-  // navigation.setOptions({ title: 'user' });
 
   if (!chatRoom) {
     return <ActivityIndicator color="gold" size="large" />;

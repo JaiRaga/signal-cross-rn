@@ -14,6 +14,7 @@ import {
   MaterialCommunityIcons,
   AntDesign,
 } from '@expo/vector-icons';
+import EmojiSelector from 'react-native-emoji-selector';
 import { Auth, DataStore } from 'aws-amplify';
 import { Message, ChatRoom } from '../../src/models';
 
@@ -21,6 +22,7 @@ import styles from './styles';
 
 export default function MessageInput({ chatRoom }) {
   const [message, setMessage] = useState('');
+  const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
 
   const sendMessage = async () => {
     const user = await Auth.currentAuthenticatedUser();
@@ -35,6 +37,7 @@ export default function MessageInput({ chatRoom }) {
     updateLastMessage(newMessage);
 
     setMessage('');
+    setIsEmojiPickerOpen(false)
   };
 
   const updateLastMessage = async (newMessage) => {
@@ -59,38 +62,55 @@ export default function MessageInput({ chatRoom }) {
 
   return (
     <KeyboardAvoidingView
-      style={styles.root}
+      style={[styles.root, { height: isEmojiPickerOpen ? '50%' : 'auto' }]}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={100}
     >
-      <View style={styles.inputContainer}>
-        <SimpleLineIcons
-          name="emotsmile"
-          size={24}
-          color="grey"
-          style={styles.icon}
-        />
-        <TextInput
-          style={styles.input}
-          value={message}
-          onChangeText={(text) => setMessage(text)}
-          placeholder="Signal Message..."
-        />
-        <Feather name="camera" size={24} color="grey" style={styles.icon} />
-        <MaterialCommunityIcons
-          name="microphone-outline"
-          size={24}
-          color="grey"
-          style={styles.icon}
-        />
+      <View style={styles.row}>
+        <View style={styles.inputContainer}>
+          <Pressable
+            onPress={() =>
+              setIsEmojiPickerOpen((currentValue) => !currentValue)
+            }
+          >
+            <SimpleLineIcons
+              name="emotsmile"
+              size={24}
+              color="grey"
+              style={styles.icon}
+            />
+          </Pressable>
+          <TextInput
+            style={styles.input}
+            value={message}
+            onChangeText={(text) => setMessage(text)}
+            placeholder="Signal Message..."
+            onPressIn={() => setIsEmojiPickerOpen(false)}
+          />
+          <Feather name="camera" size={24} color="grey" style={styles.icon} />
+          <MaterialCommunityIcons
+            name="microphone-outline"
+            size={24}
+            color="grey"
+            style={styles.icon}
+          />
+        </View>
+        <Pressable onPress={onPress} style={styles.buttonContainer}>
+          {message ? (
+            <Feather name="send" size={18} color="white" />
+          ) : (
+            <AntDesign name="plus" size={24} color="white" />
+          )}
+        </Pressable>
       </View>
-      <Pressable onPress={onPress} style={styles.buttonContainer}>
-        {message ? (
-          <Feather name="send" size={18} color="white" />
-        ) : (
-          <AntDesign name="plus" size={24} color="white" />
-        )}
-      </Pressable>
+
+      {isEmojiPickerOpen && (
+        <EmojiSelector
+          onEmojiSelected={(emoji) => setMessage((currentMesage) => currentMesage + emoji)}
+          columns={10}
+          showSearchBar={false}
+        />
+      )}
     </KeyboardAvoidingView>
   );
 }

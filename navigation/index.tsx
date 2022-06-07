@@ -66,10 +66,10 @@ function RootNavigator() {
       <Stack.Screen
         name="ChatRoom"
         component={ChatRoomScreen}
-        options={{
+        options={({ route }) => ({
           headerBackVisible: false,
           headerBackTitleVisible: false,
-          headerTitle: ChatRoomHeader,
+          headerTitle: () => <ChatRoomHeader id={route.params?.id} />,
           headerLeft: (props) => (
             <HeaderBackButton
               {...props}
@@ -77,12 +77,12 @@ function RootNavigator() {
               onPress={() => navigation.goBack()}
             />
           ),
-        }}
+        })}
       />
       <Stack.Screen
         name="UsersScreen"
         component={UsersScreen}
-        options={{ title: "Users" }}
+        options={{ title: 'Users' }}
       />
     </Stack.Navigator>
   );

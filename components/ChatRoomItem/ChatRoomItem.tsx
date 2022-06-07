@@ -12,7 +12,7 @@ const ChatRoomItem = ({ chatRoom }) => {
 
   const navigation = useNavigation();
 
-  console.log('Home screen', chatRoom);
+  // console.log('Home screen', chatRoom);
   // To display users on the home screen who are in the auth user chat list
   useEffect(() => {
     const fetchUser = async () => {
@@ -20,7 +20,6 @@ const ChatRoomItem = ({ chatRoom }) => {
         .filter((ChatRoomUser) => ChatRoomUser.chatRoom.id === chatRoom.id)
         .map((chatRoomUser) => chatRoomUser.user);
 
-      console.log(fetchedUsers);
       setUsers(fetchedUsers);
 
       const authUser = await Auth.currentAuthenticatedUser();

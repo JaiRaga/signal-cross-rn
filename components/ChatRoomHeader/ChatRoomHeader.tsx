@@ -1,8 +1,37 @@
+import { useState, useEffect } from 'react';
 import { useWindowDimensions, View, Image, Platform, Text } from 'react-native';
 import { Feather, Entypo } from '@expo/vector-icons';
+import { Auth, DataStore } from 'aws-amplify';
+import { ChatRoomUser, User } from '../../src/models';
 
-const ChatRoomHeader = (props) => {
+interface chatRoomHeaderProps {
+  id: string;
+}
+
+const ChatRoomHeader = ({ id }: chatRoomHeaderProps) => {
   const { width } = useWindowDimensions();
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    if (!id) {
+      return;
+    }
+
+    const fetchUser = async () => {
+      const fetchedUsers = (await DataStore.query(ChatRoomUser))
+        .filter((ChatRoomUser) => ChatRoomUser.chatRoom.id === id)
+        .map((chatRoomUser) => chatRoomUser.user);
+
+      // setUsers(fetchedUsers);
+
+      const authUser = await Auth.currentAuthenticatedUser();
+      setUser(
+        fetchedUsers.find((user) => user.id !== authUser.attributes.sub) || null
+      );
+    };
+
+    fetchUser();
+  }, []);
   return (
     <View
       style={[
@@ -20,7 +49,7 @@ const ChatRoomHeader = (props) => {
     >
       <Image
         source={{
-          uri: 'https://avatars.githubusercontent.com/u/44367062?s=400&u=8d55969ede5e1034fe015603d80b82958d249392&v=4',
+          uri: user?.imageUri,
         }}
         style={{ width: 30, height: 30, borderRadius: 30 }}
       />
@@ -31,7 +60,7 @@ const ChatRoomHeader = (props) => {
           fontWeight: 'bold',
         }}
       >
-        {props.children}
+        {user?.name}
       </Text>
       <Feather
         name="camera"

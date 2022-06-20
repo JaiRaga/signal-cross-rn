@@ -5,6 +5,23 @@ const styles = StyleSheet.create({
     // flexDirection: "row",
     padding: 10
   },
+  sendImageContainer: {
+    flexDirection: 'row',
+    marginVertical: 10,
+    alignSelf: 'stretch',
+    justifyContent: 'space-between',
+    borderWidth: 1,
+    borderColor: 'lightgrey',
+    borderRadius: 10
+  },
+  image: {
+    width: 100,
+    height: 100,
+    borderRadius: 10
+  },
+  closeIcon: {
+    margin: 5
+  },
   row: {
     flexDirection: 'row'
   },

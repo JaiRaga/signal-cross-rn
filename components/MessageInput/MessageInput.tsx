@@ -1,19 +1,21 @@
 import {
   StyleSheet,
   Text,
+  Image,
   TextInput,
   View,
   Pressable,
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   SimpleLineIcons,
   Feather,
   MaterialCommunityIcons,
   AntDesign,
 } from '@expo/vector-icons';
+import * as ImagePicker from 'expo-image-picker';
 import EmojiSelector from 'react-native-emoji-selector';
 import { Auth, DataStore } from 'aws-amplify';
 import { Message, ChatRoom } from '../../src/models';
@@ -23,6 +25,24 @@ import styles from './styles';
 export default function MessageInput({ chatRoom }) {
   const [message, setMessage] = useState('');
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
+  const [image, setImage] = useState<string | null>(null);
+
+  // Image picker
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.cancelled) {
+      setImage(result.uri);
+    }
+  };
 
   const sendMessage = async () => {
     const user = await Auth.currentAuthenticatedUser();
@@ -37,7 +57,7 @@ export default function MessageInput({ chatRoom }) {
     updateLastMessage(newMessage);
 
     setMessage('');
-    setIsEmojiPickerOpen(false)
+    setIsEmojiPickerOpen(false);
   };
 
   const updateLastMessage = async (newMessage) => {
@@ -66,6 +86,19 @@ export default function MessageInput({ chatRoom }) {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={100}
     >
+      {image && (
+        <View style={styles.sendImageContainer}>
+          <Image source={{ uri: image }} style={styles.image} />
+          <Pressable onPress={() => setImage(null)}>
+            <AntDesign
+              name="close"
+              size={24}
+              color="black"
+              style={styles.closeIcon}
+            />
+          </Pressable>
+        </View>
+      )}
       <View style={styles.row}>
         <View style={styles.inputContainer}>
           <Pressable
@@ -87,6 +120,9 @@ export default function MessageInput({ chatRoom }) {
             placeholder="Signal Message..."
             onPressIn={() => setIsEmojiPickerOpen(false)}
           />
+          <Pressable onPress={pickImage}>
+            <Feather name="image" size={24} color="grey" style={styles.icon} />
+          </Pressable>
           <Feather name="camera" size={24} color="grey" style={styles.icon} />
           <MaterialCommunityIcons
             name="microphone-outline"
@@ -106,7 +142,9 @@ export default function MessageInput({ chatRoom }) {
 
       {isEmojiPickerOpen && (
         <EmojiSelector
-          onEmojiSelected={(emoji) => setMessage((currentMesage) => currentMesage + emoji)}
+          onEmojiSelected={(emoji) =>
+            setMessage((currentMesage) => currentMesage + emoji)
+          }
           columns={10}
           showSearchBar={false}
         />

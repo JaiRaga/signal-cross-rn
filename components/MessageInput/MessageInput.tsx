@@ -17,7 +17,8 @@ import {
 } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import EmojiSelector from 'react-native-emoji-selector';
-import { Auth, DataStore } from 'aws-amplify';
+import { Auth, DataStore, Storage } from 'aws-amplify';
+import { v4 as uuidv4 } from 'uuid';
 import { Message, ChatRoom } from '../../src/models';
 
 import styles from './styles';
@@ -42,6 +43,34 @@ export default function MessageInput({ chatRoom }) {
     if (!result.cancelled) {
       setImage(result.uri);
     }
+  };
+
+  // take photo
+  const takePhoto = async () => {
+    const result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      aspect: [4, 3],
+    });
+  };
+
+  // send image
+  const sendImage = async () => {
+    if (!image) {
+      return;
+    }
+    const blob = await getImageBlob();
+    await Storage.put(`${uuidv4()}.png`, blob);
+  };
+
+  // turns the image uri into a blob
+  const getImageBlob = async () => {
+    if (!image) {
+      return null;
+    }
+
+    const response = await fetch(image);
+    const blob = await response.blob();
+    return blob;
   };
 
   const sendMessage = async () => {
@@ -73,7 +102,9 @@ export default function MessageInput({ chatRoom }) {
   };
 
   const onPress = () => {
-    if (message) {
+    if (image) {
+      sendImage();
+    } else if (message) {
       sendMessage();
     } else {
       onPlusClicked();
@@ -123,7 +154,11 @@ export default function MessageInput({ chatRoom }) {
           <Pressable onPress={pickImage}>
             <Feather name="image" size={24} color="grey" style={styles.icon} />
           </Pressable>
-          <Feather name="camera" size={24} color="grey" style={styles.icon} />
+
+          <Pressable onPress={takePhoto}>
+            <Feather name="camera" size={24} color="grey" style={styles.icon} />
+          </Pressable>
+
           <MaterialCommunityIcons
             name="microphone-outline"
             size={24}
@@ -132,7 +167,7 @@ export default function MessageInput({ chatRoom }) {
           />
         </View>
         <Pressable onPress={onPress} style={styles.buttonContainer}>
-          {message ? (
+          {message || image ? (
             <Feather name="send" size={18} color="white" />
           ) : (
             <AntDesign name="plus" size={24} color="white" />

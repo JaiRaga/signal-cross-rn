@@ -5,10 +5,10 @@ import { useNavigation } from '@react-navigation/native';
 
 const HomeHeader = (props) => {
   const { width } = useWindowDimensions();
-  const navigation = useNavigation()
+  const navigation = useNavigation();
 
   const logout = () => {
-    Auth.signOut()
+    Auth.signOut();
   };
 
   return (
@@ -48,7 +48,7 @@ const HomeHeader = (props) => {
         style={{ marginHorizontal: 10 }}
       />
       <Feather
-        name="edit-2"
+        name="users"
         size={24}
         color="black"
         onPress={() => navigation.navigate('UsersScreen')}

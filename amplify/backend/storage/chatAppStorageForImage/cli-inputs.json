@@ -1,0 +1,13 @@
+{
+  "resourceName": "chatAppStorageForImage",
+  "policyUUID": "8ca2ea1a",
+  "bucketName": "chatappbackend768d8c93339049c49db36b820720bde9",
+  "storageAccess": "auth",
+  "guestAccess": [],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ"
+  ],
+  "triggerFunction": "NONE",
+  "groupAccess": {}
+}

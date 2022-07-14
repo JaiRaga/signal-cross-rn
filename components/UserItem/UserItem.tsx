@@ -21,7 +21,7 @@ const UserItem = ({ user }) => {
     const dbUser = await DataStore.query(User, authUser.attributes.sub);
     await DataStore.save(
       new ChatRoomUser({
-        user: dbUser,
+        user: dbUser!,
         chatRoom: newChatRoom,
       })
     );
